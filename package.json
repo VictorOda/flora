@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite dev --port 5172 --host",
+    "dev": "vite dev --port 5173 --host",
     "build": "vite build",
     "serve": "vite preview",
     "test": "vitest run",
@@ -17,6 +17,8 @@
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
+    "@radix-ui/react-avatar": "^1.1.11",
+    "@radix-ui/react-slot": "^1.2.4",
     "@t3-oss/env-core": "^0.13.8",
     "@tailwindcss/vite": "^4.0.6",
     "@tanstack/react-devtools": "^0.7.0",
@@ -32,6 +34,7 @@
     "drizzle-kit": "^0.30.0",
     "drizzle-orm": "^0.39.0",
     "lucide-react": "^0.544.0",
+    "motion": "^12.23.25",
     "nitro": "latest",
     "pg": "^8.11.0",
     "react": "^19.2.0",

@@ -11,6 +11,7 @@ import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
 import appCss from '../styles.css?url'
 
 import type { QueryClient } from '@tanstack/react-query'
+import { Header } from '@/components/header'
 
 interface MyRouterContext {
   queryClient: QueryClient
@@ -47,8 +48,13 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <head>
         <HeadContent />
       </head>
-      <body>
-        {children}
+      <body className='bg-background'>
+        <Header />
+
+        <main className='max-w-5xl mx-auto my-12'>
+          {children}
+        </main>
+
         <TanStackDevtools
           config={{
             position: 'bottom-right',
