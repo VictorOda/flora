@@ -65,18 +65,18 @@ export const profiles = pgTable(
     pgPolicy('profiles_insert_own', {
       to: authenticatedRole,
       for: 'insert',
-      withCheck: sql`${table.id} = auth.uid()`,
+      withCheck: sql`${table.id} = (select auth.uid())`,
     }),
     pgPolicy('profiles_update_own', {
       to: authenticatedRole,
       for: 'update',
-      using: sql`${table.id} = auth.uid()`,
-      withCheck: sql`${table.id} = auth.uid()`,
+      using: sql`${table.id} = (select auth.uid())`,
+      withCheck: sql`${table.id} = (select auth.uid())`,
     }),
     pgPolicy('profiles_delete_own', {
       to: authenticatedRole,
       for: 'delete',
-      using: sql`${table.id} = auth.uid()`,
+      using: sql`${table.id} = (select auth.uid())`,
     }),
   ],
 )
@@ -114,18 +114,18 @@ export const plants = pgTable(
     pgPolicy('plants_insert_own', {
       to: authenticatedRole,
       for: 'insert',
-      withCheck: sql`${table.userId} = auth.uid()`,
+      withCheck: sql`${table.userId} = (select auth.uid())`,
     }),
     pgPolicy('plants_update_own', {
       to: authenticatedRole,
       for: 'update',
-      using: sql`${table.userId} = auth.uid()`,
-      withCheck: sql`${table.userId} = auth.uid()`,
+      using: sql`${table.userId} = (select auth.uid())`,
+      withCheck: sql`${table.userId} = (select auth.uid())`,
     }),
     pgPolicy('plants_delete_own', {
       to: authenticatedRole,
       for: 'delete',
-      using: sql`${table.userId} = auth.uid()`,
+      using: sql`${table.userId} = (select auth.uid())`,
     }),
   ],
 )
@@ -171,24 +171,24 @@ export const logs = pgTable(
       to: authenticatedRole,
       for: 'insert',
       withCheck: sql`
-        ${table.userId} = auth.uid()
+        ${table.userId} = (select auth.uid())
         AND EXISTS (
           SELECT 1 FROM plants p
           WHERE p.id = ${table.plantId}
-            AND p.user_id = auth.uid()
+            AND p.user_id = (select auth.uid())
         )
       `,
     }),
     pgPolicy('logs_update_own', {
       to: authenticatedRole,
       for: 'update',
-      using: sql`${table.userId} = auth.uid()`,
-      withCheck: sql`${table.userId} = auth.uid()`,
+      using: sql`${table.userId} = (select auth.uid())`,
+      withCheck: sql`${table.userId} = (select auth.uid())`,
     }),
     pgPolicy('logs_delete_own', {
       to: authenticatedRole,
       for: 'delete',
-      using: sql`${table.userId} = auth.uid()`,
+      using: sql`${table.userId} = (select auth.uid())`,
     }),
   ],
 )
@@ -227,7 +227,7 @@ export const photos = pgTable(
         EXISTS (
           SELECT 1 FROM logs l
           WHERE l.id = ${table.logId}
-            AND l.user_id = auth.uid()
+            AND l.user_id = (select auth.uid())
         )
       `,
     }),
@@ -238,14 +238,14 @@ export const photos = pgTable(
         EXISTS (
           SELECT 1 FROM logs l
           WHERE l.id = ${table.logId}
-            AND l.user_id = auth.uid()
+            AND l.user_id = (select auth.uid())
         )
       `,
       withCheck: sql`
         EXISTS (
           SELECT 1 FROM logs l
           WHERE l.id = ${table.logId}
-            AND l.user_id = auth.uid()
+            AND l.user_id = (select auth.uid())
         )
       `,
     }),
@@ -256,7 +256,7 @@ export const photos = pgTable(
         EXISTS (
           SELECT 1 FROM logs l
           WHERE l.id = ${table.logId}
-            AND l.user_id = auth.uid()
+            AND l.user_id = (select auth.uid())
         )
       `,
     }),
