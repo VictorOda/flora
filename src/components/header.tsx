@@ -1,31 +1,43 @@
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Dock, DockIcon } from "@/components/ui/dock";
+import { Button } from '@/components/ui/button'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Card } from '@/components/ui/card'
+import { Link } from '@/components/ui/link'
+import { useRouteContext } from '@tanstack/react-router'
+import { Route } from '@/routes/__root'
 
 export function Header() {
-	return (
-		<Dock className="w-full max-w-5xl bg-sidebar"
-			leftChildren={<DockIcon>
-				<Avatar>
-					<AvatarImage src='' alt='User icon' />
-					<AvatarFallback>U</AvatarFallback>
-				</Avatar>
-			</DockIcon>}
-			rightChildren={
-				<DockIcon className='mr-6'>
-					<Button>+ Log</Button>
-				</DockIcon>
-			}
-		>
-			<DockIcon>
-				Frends
-			</DockIcon>
-			<DockIcon>
-				Diary
-			</DockIcon>
-			<DockIcon>
-				Flora
-			</DockIcon>
-		</Dock>
-	)
+  const { user } = useRouteContext({ from: Route.id })
+
+  return (
+    <div className="w-full max-w-5xl mx-auto p-4">
+      <Card className="flex flex-row justify-between items-center bg-sidebar rounded-full p-2">
+        <div>
+          {user ? (
+            <div className="flex flex-row items-center gap-4">
+              <Avatar>
+                <AvatarImage src="" alt="User icon" />
+                <AvatarFallback>U</AvatarFallback>
+              </Avatar>
+              <Link to="/sign-out">Sign Out</Link>
+            </div>
+          ) : (
+            <div className="flex flex-row gap-4">
+              <Link to="/sign-in">Sign In</Link>
+              <Link to="/sign-up">Sign Up</Link>
+            </div>
+          )}
+        </div>
+
+        <div className="flex flex-row gap-4">
+          <Link to="/">Friends</Link>
+          <Link to="/">Diary</Link>
+          <Link to="/">Flora</Link>
+        </div>
+
+        <div>
+          <Button>+ Log</Button>
+        </div>
+      </Card>
+    </div>
+  )
 }

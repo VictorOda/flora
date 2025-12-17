@@ -1,6 +1,6 @@
 {
-  "id": "81283de7-291f-46ad-8892-6c103a66a78a",
-  "prevId": "e6b4e48c-9524-47b0-baf2-63f437f9a9d9",
+  "id": "2607ae6f-6dab-4669-9040-e3847629a575",
+  "prevId": "7258eac7-c016-446f-b554-6a8d4cf7e65e",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -148,7 +148,7 @@
           "to": [
             "authenticated"
           ],
-          "withCheck": "\n        \"logs\".\"user_id\" = auth.uid()\n        AND EXISTS (\n          SELECT 1 FROM plants p\n          WHERE p.id = \"logs\".\"plant_id\"\n            AND p.user_id = auth.uid()\n        )\n      "
+          "withCheck": "\n        \"logs\".\"user_id\" = (select auth.uid())\n        AND EXISTS (\n          SELECT 1 FROM plants p\n          WHERE p.id = \"logs\".\"plant_id\"\n            AND p.user_id = (select auth.uid())\n        )\n      "
         },
         "logs_update_own": {
           "name": "logs_update_own",
@@ -157,8 +157,8 @@
           "to": [
             "authenticated"
           ],
-          "using": "\"logs\".\"user_id\" = auth.uid()",
-          "withCheck": "\"logs\".\"user_id\" = auth.uid()"
+          "using": "\"logs\".\"user_id\" = (select auth.uid())",
+          "withCheck": "\"logs\".\"user_id\" = (select auth.uid())"
         },
         "logs_delete_own": {
           "name": "logs_delete_own",
@@ -167,7 +167,7 @@
           "to": [
             "authenticated"
           ],
-          "using": "\"logs\".\"user_id\" = auth.uid()"
+          "using": "\"logs\".\"user_id\" = (select auth.uid())"
         }
       },
       "checkConstraints": {},
@@ -291,7 +291,7 @@
           "to": [
             "authenticated"
           ],
-          "withCheck": "\n        EXISTS (\n          SELECT 1 FROM logs l\n          WHERE l.id = \"photos\".\"log_id\"\n            AND l.user_id = auth.uid()\n        )\n      "
+          "withCheck": "\n        EXISTS (\n          SELECT 1 FROM logs l\n          WHERE l.id = \"photos\".\"log_id\"\n            AND l.user_id = (select auth.uid())\n        )\n      "
         },
         "photos_update_own": {
           "name": "photos_update_own",
@@ -300,8 +300,8 @@
           "to": [
             "authenticated"
           ],
-          "using": "\n        EXISTS (\n          SELECT 1 FROM logs l\n          WHERE l.id = \"photos\".\"log_id\"\n            AND l.user_id = auth.uid()\n        )\n      ",
-          "withCheck": "\n        EXISTS (\n          SELECT 1 FROM logs l\n          WHERE l.id = \"photos\".\"log_id\"\n            AND l.user_id = auth.uid()\n        )\n      "
+          "using": "\n        EXISTS (\n          SELECT 1 FROM logs l\n          WHERE l.id = \"photos\".\"log_id\"\n            AND l.user_id = (select auth.uid())\n        )\n      ",
+          "withCheck": "\n        EXISTS (\n          SELECT 1 FROM logs l\n          WHERE l.id = \"photos\".\"log_id\"\n            AND l.user_id = (select auth.uid())\n        )\n      "
         },
         "photos_delete_own": {
           "name": "photos_delete_own",
@@ -310,7 +310,7 @@
           "to": [
             "authenticated"
           ],
-          "using": "\n        EXISTS (\n          SELECT 1 FROM logs l\n          WHERE l.id = \"photos\".\"log_id\"\n            AND l.user_id = auth.uid()\n        )\n      "
+          "using": "\n        EXISTS (\n          SELECT 1 FROM logs l\n          WHERE l.id = \"photos\".\"log_id\"\n            AND l.user_id = (select auth.uid())\n        )\n      "
         }
       },
       "checkConstraints": {},
@@ -426,7 +426,7 @@
           "to": [
             "authenticated"
           ],
-          "withCheck": "\"plants\".\"user_id\" = auth.uid()"
+          "withCheck": "\"plants\".\"user_id\" = (select auth.uid())"
         },
         "plants_update_own": {
           "name": "plants_update_own",
@@ -435,8 +435,8 @@
           "to": [
             "authenticated"
           ],
-          "using": "\"plants\".\"user_id\" = auth.uid()",
-          "withCheck": "\"plants\".\"user_id\" = auth.uid()"
+          "using": "\"plants\".\"user_id\" = (select auth.uid())",
+          "withCheck": "\"plants\".\"user_id\" = (select auth.uid())"
         },
         "plants_delete_own": {
           "name": "plants_delete_own",
@@ -445,7 +445,7 @@
           "to": [
             "authenticated"
           ],
-          "using": "\"plants\".\"user_id\" = auth.uid()"
+          "using": "\"plants\".\"user_id\" = (select auth.uid())"
         }
       },
       "checkConstraints": {},
@@ -569,7 +569,7 @@
           "to": [
             "authenticated"
           ],
-          "withCheck": "\"profiles\".\"id\" = auth.uid()"
+          "withCheck": "\n        (select auth.uid()) IS NULL\n        OR \"profiles\".\"id\" = (select auth.uid())\n      "
         },
         "profiles_update_own": {
           "name": "profiles_update_own",
@@ -578,8 +578,8 @@
           "to": [
             "authenticated"
           ],
-          "using": "\"profiles\".\"id\" = auth.uid()",
-          "withCheck": "\"profiles\".\"id\" = auth.uid()"
+          "using": "\"profiles\".\"id\" = (select auth.uid())",
+          "withCheck": "\"profiles\".\"id\" = (select auth.uid())"
         },
         "profiles_delete_own": {
           "name": "profiles_delete_own",
@@ -588,7 +588,7 @@
           "to": [
             "authenticated"
           ],
-          "using": "\"profiles\".\"id\" = auth.uid()"
+          "using": "\"profiles\".\"id\" = (select auth.uid())"
         }
       },
       "checkConstraints": {

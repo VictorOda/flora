@@ -5,22 +5,15 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1765746617565,
-      "tag": "0000_little_dragon_lord",
+      "when": 1765935240160,
+      "tag": "0000_aromatic_tarot",
       "breakpoints": true
     },
     {
       "idx": 1,
       "version": "7",
-      "when": 1765830159182,
-      "tag": "0001_strange_gorilla_man",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1765830615173,
-      "tag": "0002_typical_mongu",
+      "when": 1765935336020,
+      "tag": "0001_triggers",
       "breakpoints": true
     }
   ]

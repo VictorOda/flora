@@ -60,51 +60,54 @@ CREATE UNIQUE INDEX "profiles_username_unique" ON "profiles" USING btree ("usern
 CREATE POLICY "logs_public_select" ON "logs" AS PERMISSIVE FOR SELECT TO "anon" USING (true);--> statement-breakpoint
 CREATE POLICY "logs_public_select_auth" ON "logs" AS PERMISSIVE FOR SELECT TO "authenticated" USING (true);--> statement-breakpoint
 CREATE POLICY "logs_insert_own" ON "logs" AS PERMISSIVE FOR INSERT TO "authenticated" WITH CHECK (
-        "logs"."user_id" = auth.uid()
+        "logs"."user_id" = (select auth.uid())
         AND EXISTS (
           SELECT 1 FROM plants p
           WHERE p.id = "logs"."plant_id"
-            AND p.user_id = auth.uid()
+            AND p.user_id = (select auth.uid())
         )
       );--> statement-breakpoint
-CREATE POLICY "logs_update_own" ON "logs" AS PERMISSIVE FOR UPDATE TO "authenticated" USING ("logs"."user_id" = auth.uid()) WITH CHECK ("logs"."user_id" = auth.uid());--> statement-breakpoint
-CREATE POLICY "logs_delete_own" ON "logs" AS PERMISSIVE FOR DELETE TO "authenticated" USING ("logs"."user_id" = auth.uid());--> statement-breakpoint
+CREATE POLICY "logs_update_own" ON "logs" AS PERMISSIVE FOR UPDATE TO "authenticated" USING ("logs"."user_id" = (select auth.uid())) WITH CHECK ("logs"."user_id" = (select auth.uid()));--> statement-breakpoint
+CREATE POLICY "logs_delete_own" ON "logs" AS PERMISSIVE FOR DELETE TO "authenticated" USING ("logs"."user_id" = (select auth.uid()));--> statement-breakpoint
 CREATE POLICY "photos_public_select" ON "photos" AS PERMISSIVE FOR SELECT TO "anon" USING (true);--> statement-breakpoint
 CREATE POLICY "photos_public_select_auth" ON "photos" AS PERMISSIVE FOR SELECT TO "authenticated" USING (true);--> statement-breakpoint
 CREATE POLICY "photos_insert_own" ON "photos" AS PERMISSIVE FOR INSERT TO "authenticated" WITH CHECK (
         EXISTS (
           SELECT 1 FROM logs l
           WHERE l.id = "photos"."log_id"
-            AND l.user_id = auth.uid()
+            AND l.user_id = (select auth.uid())
         )
       );--> statement-breakpoint
 CREATE POLICY "photos_update_own" ON "photos" AS PERMISSIVE FOR UPDATE TO "authenticated" USING (
         EXISTS (
           SELECT 1 FROM logs l
           WHERE l.id = "photos"."log_id"
-            AND l.user_id = auth.uid()
+            AND l.user_id = (select auth.uid())
         )
       ) WITH CHECK (
         EXISTS (
           SELECT 1 FROM logs l
           WHERE l.id = "photos"."log_id"
-            AND l.user_id = auth.uid()
+            AND l.user_id = (select auth.uid())
         )
       );--> statement-breakpoint
 CREATE POLICY "photos_delete_own" ON "photos" AS PERMISSIVE FOR DELETE TO "authenticated" USING (
         EXISTS (
           SELECT 1 FROM logs l
           WHERE l.id = "photos"."log_id"
-            AND l.user_id = auth.uid()
+            AND l.user_id = (select auth.uid())
         )
       );--> statement-breakpoint
 CREATE POLICY "plants_public_select" ON "plants" AS PERMISSIVE FOR SELECT TO "anon" USING (true);--> statement-breakpoint
 CREATE POLICY "plants_public_select_auth" ON "plants" AS PERMISSIVE FOR SELECT TO "authenticated" USING (true);--> statement-breakpoint
-CREATE POLICY "plants_insert_own" ON "plants" AS PERMISSIVE FOR INSERT TO "authenticated" WITH CHECK ("plants"."user_id" = auth.uid());--> statement-breakpoint
-CREATE POLICY "plants_update_own" ON "plants" AS PERMISSIVE FOR UPDATE TO "authenticated" USING ("plants"."user_id" = auth.uid()) WITH CHECK ("plants"."user_id" = auth.uid());--> statement-breakpoint
-CREATE POLICY "plants_delete_own" ON "plants" AS PERMISSIVE FOR DELETE TO "authenticated" USING ("plants"."user_id" = auth.uid());--> statement-breakpoint
+CREATE POLICY "plants_insert_own" ON "plants" AS PERMISSIVE FOR INSERT TO "authenticated" WITH CHECK ("plants"."user_id" = (select auth.uid()));--> statement-breakpoint
+CREATE POLICY "plants_update_own" ON "plants" AS PERMISSIVE FOR UPDATE TO "authenticated" USING ("plants"."user_id" = (select auth.uid())) WITH CHECK ("plants"."user_id" = (select auth.uid()));--> statement-breakpoint
+CREATE POLICY "plants_delete_own" ON "plants" AS PERMISSIVE FOR DELETE TO "authenticated" USING ("plants"."user_id" = (select auth.uid()));--> statement-breakpoint
 CREATE POLICY "profiles_public_select" ON "profiles" AS PERMISSIVE FOR SELECT TO "anon" USING (true);--> statement-breakpoint
 CREATE POLICY "profiles_public_select_auth" ON "profiles" AS PERMISSIVE FOR SELECT TO "authenticated" USING (true);--> statement-breakpoint
-CREATE POLICY "profiles_insert_own" ON "profiles" AS PERMISSIVE FOR INSERT TO "authenticated" WITH CHECK ("profiles"."id" = auth.uid());--> statement-breakpoint
-CREATE POLICY "profiles_update_own" ON "profiles" AS PERMISSIVE FOR UPDATE TO "authenticated" USING ("profiles"."id" = auth.uid()) WITH CHECK ("profiles"."id" = auth.uid());--> statement-breakpoint
-CREATE POLICY "profiles_delete_own" ON "profiles" AS PERMISSIVE FOR DELETE TO "authenticated" USING ("profiles"."id" = auth.uid());
+CREATE POLICY "profiles_insert_own" ON "profiles" AS PERMISSIVE FOR INSERT TO "authenticated" WITH CHECK (
+        (select auth.uid()) IS NULL
+        OR "profiles"."id" = (select auth.uid())
+      );--> statement-breakpoint
+CREATE POLICY "profiles_update_own" ON "profiles" AS PERMISSIVE FOR UPDATE TO "authenticated" USING ("profiles"."id" = (select auth.uid())) WITH CHECK ("profiles"."id" = (select auth.uid()));--> statement-breakpoint
+CREATE POLICY "profiles_delete_own" ON "profiles" AS PERMISSIVE FOR DELETE TO "authenticated" USING ("profiles"."id" = (select auth.uid()));

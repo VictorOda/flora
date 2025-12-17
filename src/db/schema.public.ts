@@ -65,7 +65,10 @@ export const profiles = pgTable(
     pgPolicy('profiles_insert_own', {
       to: authenticatedRole,
       for: 'insert',
-      withCheck: sql`${table.id} = (select auth.uid())`,
+      withCheck: sql`
+        (select auth.uid()) IS NULL
+        OR ${table.id} = (select auth.uid())
+      `,
     }),
     pgPolicy('profiles_update_own', {
       to: authenticatedRole,

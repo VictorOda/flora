@@ -12,12 +12,35 @@ import appCss from '../styles.css?url'
 
 import type { QueryClient } from '@tanstack/react-query'
 import { Header } from '@/components/header'
+import { seo } from '@/utils/seo'
+import { createServerFn } from '@tanstack/react-start'
+import { getSupabaseServerClient } from '@/utils/supabase'
+
+const fetchUser = createServerFn({ method: 'GET' }).handler(async () => {
+  const supabase = getSupabaseServerClient()
+  const { data, error: _error } = await supabase.auth.getUser()
+
+  if (!data.user?.email) {
+    return null
+  }
+
+  return {
+    email: data.user.email,
+  }
+})
 
 interface MyRouterContext {
   queryClient: QueryClient
 }
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
+  beforeLoad: async () => {
+    const user = await fetchUser()
+
+    return {
+      user,
+    }
+  },
   head: () => ({
     meta: [
       {
@@ -27,10 +50,13 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         name: 'viewport',
         content: 'width=device-width, initial-scale=1',
       },
-      {
-        title: 'TanStack Start Starter',
-      },
+      ...seo({
+        title: 'Flora - Your plant diary',
+        description:
+          'Flora is a plant diary to follow your plants journey and progress as well as sharing it with the world!',
+      }),
     ],
+    // TODO: Improve links
     links: [
       {
         rel: 'stylesheet',
@@ -38,7 +64,6 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
       },
     ],
   }),
-
   shellComponent: RootDocument,
 })
 
@@ -48,12 +73,10 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <head>
         <HeadContent />
       </head>
-      <body className='bg-background'>
+      <body className="bg-background">
         <Header />
 
-        <main className='max-w-5xl mx-auto my-12'>
-          {children}
-        </main>
+        <main className="max-w-5xl mx-auto my-12">{children}</main>
 
         <TanStackDevtools
           config={{

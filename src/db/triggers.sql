@@ -6,11 +6,12 @@ SECURITY DEFINER
 SET search_path = pg_catalog, public
 AS $$
 BEGIN
-  INSERT INTO public.profiles (id, first_name, last_name)
+  INSERT INTO public.profiles (id, first_name, last_name, username)
   VALUES (
     NEW.id,
     NEW.raw_user_meta_data ->> 'first_name',
-    NEW.raw_user_meta_data ->> 'last_name'
+    NEW.raw_user_meta_data ->> 'last_name',
+    NEW.raw_user_meta_data ->> 'username'
   );
 
   RETURN NEW;
