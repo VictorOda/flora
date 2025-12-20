@@ -15,17 +15,26 @@ import { Header } from '@/components/header'
 import { seo } from '@/utils/seo'
 import { createServerFn } from '@tanstack/react-start'
 import { getSupabaseServerClient } from '@/utils/supabase'
+import { db } from '@/db'
 
 const fetchUser = createServerFn({ method: 'GET' }).handler(async () => {
   const supabase = getSupabaseServerClient()
-  const { data, error: _error } = await supabase.auth.getUser()
+  const { data: authData } = await supabase.auth.getUser()
 
-  if (!data.user?.email) {
+  if (!authData.user?.email) {
     return null
   }
 
+  const profile = await db.query.profiles.findFirst({
+    where: (profiles, { eq }) => eq(profiles.id, authData.user.id),
+  })
+
+  if (!profile) throw new Error('Failed to fetch user profile')
+
   return {
-    email: data.user.email,
+    id: authData.user.id,
+    email: authData.user.email,
+    profile,
   }
 })
 

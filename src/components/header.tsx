@@ -15,8 +15,14 @@ export function Header() {
           {user ? (
             <div className="flex flex-row items-center gap-4">
               <Avatar>
-                <AvatarImage src="" alt="User icon" />
-                <AvatarFallback>U</AvatarFallback>
+                <AvatarImage
+                  src={user.profile.photoPath ?? undefined}
+                  alt="User icon"
+                />
+                <AvatarFallback>
+                  {user.profile.firstName &&
+                    user.profile.firstName[0].toUpperCase()}
+                </AvatarFallback>
               </Avatar>
               <Link to="/sign-out">Sign Out</Link>
             </div>
