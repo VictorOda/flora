@@ -49,6 +49,7 @@ function SignInComp() {
       authAction="SIGN_IN"
       status={signInMutation.status}
       onSubmit={(e) => {
+        e.preventDefault()
         const formData = new FormData(e.target as HTMLFormElement)
         console.log('Sign In Data', formData)
 

@@ -9,6 +9,7 @@ export const signUpFn = createServerFn({ method: 'POST' })
   .inputValidator(SignUpSchema)
   .handler(async ({ data }) => {
     const supabase = getSupabaseServerClient()
+
     console.log('SIGN UP DATA', data)
     const { error } = await supabase.auth.signUp({
       email: data.email,
@@ -21,6 +22,7 @@ export const signUpFn = createServerFn({ method: 'POST' })
         },
       },
     })
+
     if (error) {
       console.log('SIGN UP ERROR', error.message)
       return {
@@ -29,9 +31,9 @@ export const signUpFn = createServerFn({ method: 'POST' })
       }
     }
 
-    // Redirect to the prev page stored in the "redirect" search param
+    // Redirect to the user's page
     throw redirect({
-      href: data.redirectUrl || '/',
+      href: `/${data.username}`,
     })
   })
 
@@ -49,6 +51,8 @@ function SignUpComp() {
       authAction="SIGN_UP"
       status={signUpMutation.status}
       onSubmit={(e) => {
+        e.preventDefault()
+        console.log('SIGN UP')
         const formData = new FormData(e.target as HTMLFormElement)
 
         signUpMutation.mutate({
