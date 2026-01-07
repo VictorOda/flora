@@ -12,6 +12,8 @@ concurrency:
 jobs:
   migrate-and-deploy:
     runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
     steps:
       - name: Checkout repository
@@ -26,10 +28,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Sanity check DATABASE_URL
+        run: node -e "console.log('DATABASE_URL present:', !!process.env.DATABASE_URL)"
+
       - name: Run database migrations
         run: npm run db:migrate
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
       - name: Deploy to Vercel (production)
         run: npx vercel deploy --prod --yes
