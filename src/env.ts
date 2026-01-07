@@ -4,6 +4,10 @@ import { z } from 'zod'
 export const env = createEnv({
   server: {
     DATABASE_URL: z.url(),
+    DB_SEEDING: z.stringbool().default(false),
+    SUPABASE_SECRET: z.string().startsWith('sb_secret_', {
+      message: 'SUPABASE_SECRET must start with sb_secret_',
+    }),
   },
 
   /**
@@ -14,7 +18,9 @@ export const env = createEnv({
 
   client: {
     VITE_APP_TITLE: z.string().min(1).optional(),
-    VITE_SUPABASE_PUBLISHABLE_KEY: z.string().min(1),
+    VITE_SUPABASE_PUBLISHABLE_KEY: z.string().startsWith('sb_publishable_', {
+      message: 'VITE_SUPABASE_PUBLISHABLE_KEY must start with sb_publishable_',
+    }),
     VITE_SUPABASE_URL: z.url(),
   },
 
