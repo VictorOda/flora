@@ -3,7 +3,7 @@ import { z } from 'zod'
 
 export const env = createEnv({
   server: {
-    DATABASE_URL: z.url(),
+    DATABASE_URL: z.string().regex(/^postgres(ql)?:\/\//),
     DB_SEEDING: z.stringbool().default(false),
     SUPABASE_SECRET: z.string().startsWith('sb_secret_', {
       message: 'SUPABASE_SECRET must start with sb_secret_',
