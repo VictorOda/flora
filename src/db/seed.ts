@@ -16,14 +16,14 @@ const supabaseAdmin = createClient(env.VITE_SUPABASE_URL, env.SUPABASE_SECRET)
 
 const USERS = {
   victor: {
-    id: '00000000-0000-0000-0000-000000000001',
+    id: '00000000-0000-4000-8000-000000000001',
     email: 'victor@test.com',
     username: 'victor',
     firstName: 'Victor',
     lastName: 'Oda',
   },
   jessica: {
-    id: '00000000-0000-0000-0000-000000000002',
+    id: '00000000-0000-4000-8000-000000000002',
     email: 'jessica@test.com',
     username: 'jessica',
     firstName: 'Jessica',
@@ -33,22 +33,22 @@ const USERS = {
 
 const PLANTS = {
   monstera: {
-    id: '10000000-0000-0000-0000-000000000001',
+    id: '10000000-0000-4000-8000-000000000001',
     name: 'Monstera Deliciosa',
     userId: USERS.victor.id,
   },
   snake: {
-    id: '10000000-0000-0000-0000-000000000002',
+    id: '10000000-0000-4000-8000-000000000002',
     name: 'Snake Plant',
     userId: USERS.victor.id,
   },
   ficusElastica: {
-    id: '10000000-0000-0000-0000-000000000003',
+    id: '10000000-0000-4000-8000-000000000003',
     name: 'Ficus Elastica',
     userId: USERS.victor.id,
   },
   cactus: {
-    id: '10000000-0000-0000-0000-000000000004',
+    id: '10000000-0000-4000-8000-000000000004',
     name: 'Cactus',
     userId: USERS.jessica.id,
   },
@@ -56,28 +56,28 @@ const PLANTS = {
 
 const LOGS = {
   monsteraLog01: {
-    id: '20000000-0000-0000-0000-000000000001',
+    id: '20000000-0000-4000-8000-000000000001',
     userId: USERS.victor.id,
     plantId: PLANTS.monstera.id,
     description: 'New leaf unfurled 🌱',
     date: new Date('2024-03-01T12:00:00Z'),
   },
   monsteraLog02: {
-    id: '20000000-0000-0000-0000-000000000002',
+    id: '20000000-0000-4000-8000-000000000002',
     userId: USERS.victor.id,
     plantId: PLANTS.monstera.id,
     description: 'Leaf died ☠️',
     date: new Date('2024-03-01T12:00:00Z'),
   },
   ficusLog01: {
-    id: '20000000-0000-0000-0000-000000000003',
+    id: '20000000-0000-4000-8000-000000000003',
     userId: USERS.victor.id,
     plantId: PLANTS.ficusElastica.id,
     description: 'Growing like crazy',
-    date: new Date('2024-03-01T12:00:00Z'),
+    date: new Date('2024-03-02T12:00:00Z'),
   },
   cactusLog01: {
-    id: '20000000-0000-0000-0000-000000000004',
+    id: '20000000-0000-4000-8000-000000000004',
     userId: USERS.jessica.id,
     plantId: PLANTS.cactus.id,
     description: 'Leaf died ☠️',
@@ -87,13 +87,13 @@ const LOGS = {
 
 const PHOTOS = [
   {
-    id: '30000000-0000-0000-0000-000000000001',
+    id: '30000000-0000-4000-8000-000000000001',
     logId: LOGS.monsteraLog01.id,
     path: 'seed/victor/monstera-1.jpg',
     order: 1,
   },
   {
-    id: '30000000-0000-0000-0000-000000000002',
+    id: '30000000-0000-4000-8000-000000000002',
     logId: LOGS.monsteraLog01.id,
     path: 'seed/victor/monstera-2.jpg',
     order: 2,
